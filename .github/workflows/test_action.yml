@@ -1,0 +1,32 @@
+# .github/workflows/test_action.yaml
+name: Test Action
+on:
+  push:
+    branches: [test]
+
+env:
+  DOMAINS_FILTER: digieye.io,example.io,mediot.io
+  IP_ADDRESS: 154.144.241.232
+  HOSTNAME: adns.test.digieye.io
+
+jobs:
+  create-dns-record:
+    runs-on: ubuntu-latest
+    name: create dns record
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Create record into Goddady
+        id: create_dns
+        uses: ./ # Uses an action in the root directory
+        # or use a released Github Action
+        # uses: shipyard/github-action/fetch-shipyard-env@1.0.0
+        with:
+          goddady-api-key: ${{ secrets.GODDADY_API_KEY }}
+          goddady-api-secret: ${{ secrets.GODDADY_API_SECRET }}
+          domains-filter: ${{ env.DOMAINS_FILTER }}
+          ip-address: ${{ env.IP_ADDRESS }}
+          hostname: ${{ env.HOSTNAME }}
+
+      - name: Print the status
+        run: echo "${{ steps.create_dns.outputs.status }}"
