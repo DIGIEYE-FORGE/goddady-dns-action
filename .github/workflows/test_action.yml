@@ -18,9 +18,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Create record into Goddady
         id: create_dns
-        uses: ./ # Uses an action in the root directory
+        #uses: ./ # Uses an action in the root directory
         # or use a released Github Action
-        # uses: shipyard/github-action/fetch-shipyard-env@1.0.0
+        uses: DIGIEYE-FORGE/goddady-dns-action@main
         with:
           goddady-api-key: ${{ secrets.GODDADY_API_KEY }}
           goddady-api-secret: ${{ secrets.GODDADY_API_SECRET }}
