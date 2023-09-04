@@ -1,0 +1,1 @@
+# goddady-dns-action
