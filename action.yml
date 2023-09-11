@@ -8,7 +8,7 @@ inputs:
   goddady-api-secret:
     description: "GODDADY API SECRET"
     required: true
-  domains-filter:
+  domain-filter:
     description: "DOMAINS FOR FILTERING PURPOSE"
     required: true
   hostname:
@@ -28,7 +28,7 @@ runs:
   args:
     - --goddady-api-key=${{ inputs.goddady-api-key }}
     - --goddady-api-secret=${{ inputs.goddady-api-secret }}
-    - --domains-filter=${{ inputs.domains-filter }}
+    - --domain-filter=${{ inputs.domain-filter }}
     - --hostname=${{ inputs.hostname }}
     - --ip-address=${{ inputs.ip-address }}
 # runs:

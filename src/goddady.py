@@ -6,7 +6,7 @@ import argparse
 
 GODDADY_API_KEY = os.environ.get("GODDADY_API_KEY")
 GODDADY_API_SECRET = os.environ.get("GODDADY_API_SECRET")
-DOMAINS_FILTER = os.environ.get("DOMAINS_FILTER")
+DOMAIN_FILTER = os.environ.get("DOMAIN_FILTER")
 HOSTNAME = os.environ.get("HOSTNAME")
 IP_ADDRESS = os.environ.get("IP_ADDRESS")
 AUTHZ_HEADER = f'sso-key {GODDADY_API_KEY}:{GODDADY_API_SECRET}'
@@ -32,8 +32,8 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--domains-filter",
-    dest="DOMAINS_FILTER",
+    "--domain-filter",
+    dest="DOMAIN_FILTER",
     type=str,
     nargs="+",
     action="extend",
@@ -63,7 +63,7 @@ args = parser.parse_args()
 print("args",args)
 GODDADY_API_KEY = args.GODDADY_API_KEY
 GODDADY_API_SECRET = args.GODDADY_API_SECRET
-DOMAINS_FILTER = args.DOMAINS_FILTER
+DOMAIN_FILTER = args.DOMAIN_FILTER
 HOSTNAME = args.HOSTNAME
 IP_ADDRESS = args.IP_ADDRESS
 AUTHZ_HEADER = f'sso-key {args.GODDADY_API_KEY}:{args.GODDADY_API_SECRET}'
@@ -71,7 +71,7 @@ AUTHZ_HEADER = f'sso-key {args.GODDADY_API_KEY}:{args.GODDADY_API_SECRET}'
 
 
 def getRecordDomain(host):
-    domains = DOMAINS_FILTER.split(",")
+    domains = DOMAIN_FILTER
     for domain in domains:
         substring_pattern = re.escape(domain)
         match = re.search(substring_pattern, host)
@@ -85,7 +85,7 @@ def getRecordDomain(host):
 
 
 def getRecordName(hostname):
-    domains = DOMAINS_FILTER.split(",")
+    domains = DOMAIN_FILTER.split(",")
     for domain in domains:
         # Define the fixed substring to search for
         substring_to_match = domain
