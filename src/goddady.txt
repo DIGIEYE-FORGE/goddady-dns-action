@@ -2,7 +2,6 @@ import requests
 import json
 import re
 import os
-import argparse
 
 GODDADY_API_KEY = os.environ.get("GODDADY_API_KEY")
 GODDADY_API_SECRET = os.environ.get("GODDADY_API_SECRET")
@@ -10,65 +9,6 @@ DOMAINS_FILTER = os.environ.get("DOMAINS_FILTER")
 HOSTNAME = os.environ.get("HOSTNAME")
 IP_ADDRESS = os.environ.get("IP_ADDRESS")
 AUTHZ_HEADER = f'sso-key {GODDADY_API_KEY}:{GODDADY_API_SECRET}'
-
-parser = argparse.ArgumentParser()
-
-parser.add_argument(
-    "--goddady-api-key",
-    dest="GODDADY_API_KEY",
-    type=str,
-    nargs="+",
-    action="extend",
-    required=True
-)
-
-parser.add_argument(
-    "--goddady-api-secret",
-    dest="GODDADY_API_SECRET",
-    type=str,
-    nargs="+",
-    action="extend",
-    required=True
-)
-
-parser.add_argument(
-    "--domains-filter",
-    dest="DOMAINS_FILTER",
-    type=str,
-    nargs="+",
-    action="extend",
-    required=True
-)
-
-parser.add_argument(
-    "--hostname",
-    dest="HOSTNAME",
-    type=str,
-    nargs="+",
-    action="extend",
-    required=True
-)
-
-parser.add_argument(
-    "--ip-address",
-    dest="IP_ADDRESS",
-    type=str,
-    nargs="+",
-    action="extend",
-    required=True
-)
-
-args = parser.parse_args()
-
-
-GODDADY_API_KEY = args.GODDADY_API_KEY
-GODDADY_API_SECRET = args.GODDADY_API_SECRET
-DOMAINS_FILTER = args.DOMAINS_FILTER
-HOSTNAME = args.HOSTNAME
-IP_ADDRESS = args.IP_ADDRESS
-AUTHZ_HEADER = f'sso-key {args.GODDADY_API_KEY}:{args.GODDADY_API_SECRET}'
-
-
 
 def getRecordDomain(host):
     domains = DOMAINS_FILTER.split(",")
