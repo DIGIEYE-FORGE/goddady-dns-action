@@ -85,7 +85,7 @@ def getRecordDomain(host):
 
 
 def getRecordName(hostname):
-    domains = DOMAIN_FILTER.split(",")
+    domains = DOMAIN_FILTER
     for domain in domains:
         # Define the fixed substring to search for
         substring_to_match = domain
