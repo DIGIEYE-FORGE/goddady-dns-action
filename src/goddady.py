@@ -3,6 +3,7 @@ import json
 import re
 import os
 import argparse
+import sys
 
 GODDADY_API_KEY = os.environ.get("GODDADY_API_KEY")
 GODDADY_API_SECRET = os.environ.get("GODDADY_API_SECRET")
@@ -71,41 +72,41 @@ AUTHZ_HEADER = f'sso-key {args.GODDADY_API_KEY}:{args.GODDADY_API_SECRET}'
 
 
 def getRecordDomain(host):
-    domains = DOMAIN_FILTER
-    for domain in domains:
-        substring_pattern = re.escape(domain)
-        match = re.search(substring_pattern, host)
-        if match:
-            matched_text = match.group()  # Get the matched text
-            print(f"Matched domain: {matched_text}")
-            return matched_text
-        else:
-            print(f"No matched domain found in {host}")
-            exit('ERROR: the HOSTNAME provided ("{}") does not matched any domain'.format(host))
+    domain = DOMAIN_FILTER
+    substring_pattern = re.escape(domain)
+    match = re.search(substring_pattern, host)
+    if match:
+        matched_text = match.group()  # Get the matched text
+        print(f"Matched domain: {matched_text}")
+        return matched_text
+    else:
+        print(f"No matched domain found in {host}")
+        exit('ERROR: the HOSTNAME provided ("{}") does not matched any domain'.format(host))
+        
 
 
 def getRecordName(hostname):
-    domains = DOMAIN_FILTER
-    for domain in domains:
-        # Define the fixed substring to search for
-        substring_to_match = domain
+    domain = DOMAIN_FILTER
+    # Define the fixed substring to search for
+    substring_to_match = domain
 
-        # Escape the substring using re.escape
-        escaped_substring = re.escape(substring_to_match)
+    # Escape the substring using re.escape
+    escaped_substring = re.escape(substring_to_match)
 
-        # Define a regex pattern to match the escaped substring
-        domain_pattern = r'^(.*?)(?=\.' + escaped_substring + r'|$)'
+    # Define a regex pattern to match the escaped substring
+    domain_pattern = r'^(.*?)(?=\.' + escaped_substring + r'|$)'
 
-        # Use re.search() to find matches
-        match = re.search(domain_pattern, hostname)
+    # Use re.search() to find matches
+    match = re.search(domain_pattern, hostname)
 
-        if match:
-            extracted_domain = match.group(1)
-            print(f"Extracted Domain: {extracted_domain}")
-            return extracted_domain
-        else:
-            print("No match found.")
-            exit('ERROR: Cannot extract the name of the HOSTNAME provided ("{}") '.format(hostname))
+    if match:
+        extracted_domain = match.group(1)
+        print(f"Extracted Domain: {extracted_domain}")
+        return extracted_domain
+    else:
+        print("No match found.")
+        exit('ERROR: Cannot extract the name of the HOSTNAME provided ("{}") '.format(hostname))
+        
             
 
 
@@ -178,6 +179,7 @@ def createDomainRecords(name, ip_address="154.144.241.232", ttl=600, domain="dig
 def updateDomainRecord(host, ip_address="154.144.241.232", type='A', ttl=600):
     name = getRecordName(host)
     domain = getRecordDomain(host)
+    print(f'[updateDomainRecord] domain = {domain}, name = {name}')
 
     headers = {
         'Content-Type': 'application/json',
@@ -202,7 +204,8 @@ def updateDomainRecord(host, ip_address="154.144.241.232", type='A', ttl=600):
         return True
     else:
         print(f'PUT request failed with status code {response.status_code}')
-        return False
+        sys.exit(-1)
+        
 
 
 def deleteDomainRecord(name, type='A', domain="digieye.io"):
