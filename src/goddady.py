@@ -60,7 +60,7 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-
+print("args",args)
 GODDADY_API_KEY = args.GODDADY_API_KEY
 GODDADY_API_SECRET = args.GODDADY_API_SECRET
 DOMAINS_FILTER = args.DOMAINS_FILTER
