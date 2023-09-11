@@ -1,0 +1,41 @@
+# action.yaml
+name: "Goddady Dns Github Action"
+description: "A Github Action that create dns record into Goddady provider"
+inputs:
+  goddady-api-key:
+    description: "GODDADY API KEY"
+    required: true
+  goddady-api-secret:
+    description: "GODDADY API SECRET"
+    required: true
+  domains-filter:
+    description: "DOMAINS FOR FILTERING PURPOSE"
+    required: true
+  hostname:
+    description: "HOSTNAME OF DOMAIN"
+    required: true
+outputs:
+  status:
+    description: "Status of record creation"
+    value: ${{ steps.goddady-script.outputs.status }}
+runs:
+  using: "composite"
+  steps:
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
+      shell: bash
+    - name: Pass Inputs to Shell
+      run: |
+        echo "GODDADY_API_KEY=${{ inputs.goddady-api-key }}" >> $GITHUB_ENV
+        echo "GODDADY_API_SECRET=${{ inputs.goddady-api-secret }}" >> $GITHUB_ENV
+        echo "DOMAINS_FILTER=${{ inputs.domains-filter }}" >> $GITHUB_ENV
+        echo "HOSTNAME=${{ inputs.hostname }}" >> $GITHUB_ENV
+      shell: bash
+    - name: Run script
+      id: goddady-script
+      run: python src/app.py
+      shell: bash

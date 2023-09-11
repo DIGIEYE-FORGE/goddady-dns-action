@@ -14,28 +14,41 @@ inputs:
   hostname:
     description: "HOSTNAME OF DOMAIN"
     required: true
-outputs:
-  status:
-    description: "Status of record creation"
-    value: ${{ steps.goddady-script.outputs.status }}
+  ip-address:
+    description: "IP OF DOMAIN"
+    required: true
+# outputs:
+#   status:
+#     description: "Status of record creation"
+#     value: ${{ steps.goddady-script.outputs.status }}
+
 runs:
-  using: "composite"
-  steps:
-    - name: Install Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
-    - name: Install Dependencies
-      run: pip install -r requirements.txt
-      shell: bash
-    - name: Pass Inputs to Shell
-      run: |
-        echo "GODDADY_API_KEY=${{ inputs.goddady-api-key }}" >> $GITHUB_ENV
-        echo "GODDADY_API_SECRET=${{ inputs.goddady-api-secret }}" >> $GITHUB_ENV
-        echo "DOMAINS_FILTER=${{ inputs.domains-filter }}" >> $GITHUB_ENV
-        echo "HOSTNAME=${{ inputs.hostname }}" >> $GITHUB_ENV
-      shell: bash
-    - name: Run script
-      id: goddady-script
-      run: python src/app.py
-      shell: bash
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - --goddady-api-key=${{ inputs.goddady-api-key }}
+    - --goddady-api-secret=${{ inputs.goddady-api-secret }}
+    - --domains-filter=${{ inputs.domains-filter }}
+    - --hostname=${{ inputs.hostname }}
+    - --ip-address=${{ inputs.ip-address }}
+# runs:
+#   using: "composite"
+#   steps:
+#     - name: Install Python
+#       uses: actions/setup-python@v4
+#       with:
+#         python-version: "3.10"
+#     - name: Install Dependencies
+#       run: pip install -r requirements.txt
+#       shell: bash
+#     - name: Pass Inputs to Shell
+#       run: |
+#         echo "GODDADY_API_KEY=${{ inputs.goddady-api-key }}" >> $GITHUB_ENV
+#         echo "GODDADY_API_SECRET=${{ inputs.goddady-api-secret }}" >> $GITHUB_ENV
+#         echo "DOMAINS_FILTER=${{ inputs.domains-filter }}" >> $GITHUB_ENV
+#         echo "HOSTNAME=${{ inputs.hostname }}" >> $GITHUB_ENV
+#       shell: bash
+#     - name: Run script
+#       id: goddady-script
+#       run: python src/app.py
+#       shell: bash
